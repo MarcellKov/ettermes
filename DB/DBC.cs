@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using webapp.DataModels;
 
@@ -17,5 +18,6 @@ namespace webapp.DB
             optionsBuilder.UseSqlServer(_config.GetConnectionString("DatabaseConnection"));
         }
         public DbSet<UserDataModel> UserDatas { get; set; }
+        public DbSet<IdentityUser> identityUsers { get; set; }
     }
 }
