@@ -16,11 +16,14 @@ namespace webapp.Controllers
 		private readonly UserManager<IdentityUser> _userManager;
 		private readonly ILogger<AccountController> _logger;
 		private readonly IEmailSenderService _emailSenderService;
-		public AccountController(UserManager<IdentityUser> userManager, ILogger<AccountController> logger,IEmailSenderService email)
+		private readonly SignInManager<IdentityUser> _signInManager;
+		public AccountController(UserManager<IdentityUser> userManager, ILogger<AccountController> logger,IEmailSenderService email,SignInManager<IdentityUser> signinmanager)
 		{
+			_signInManager = signinmanager;
 			_emailSenderService = email;
 			_userManager = userManager;
 			_logger = logger;
+			
 			
 		}
 		
@@ -39,9 +42,10 @@ namespace webapp.Controllers
 				if (res.Succeeded)
 				{
 					var token=await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    
+					await _userManager.AddToRoleAsync(user, "User");
 
-                   var callbackurl= Url.Action("EmailConfirmation", "Account", new { id = user.Id, token = token });
+
+                   var callbackurl= Url.Action("EmailConfirmation", "Account", new { id = user.Id, token = token },HttpContext.Request.Scheme,HttpContext.Request.Host.Value);
                     await _emailSenderService.SendEmailAsync(u.email, "Registration", $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackurl)}'>clicking here</a>.");
                     return RedirectToAction("Index", "Home");
                 }
@@ -71,6 +75,42 @@ namespace webapp.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+		public IActionResult SignIn()
+		{
+			return View();
+		}
+		[HttpPost]
+		public async Task<IActionResult> SignIn(string email)
+		{
+			var user = await _userManager.FindByEmailAsync(email);
+	
+			if (user != null) {
+				try
+				{
+                    await _signInManager.SignInAsync(user, false);
+					var cansignin=await _signInManager.CanSignInAsync(user);
+					_logger.LogCritical(cansignin.ToString());
+                }
+				catch (Exception ex)
+				{
+					
+					_logger.LogCritical(ex.Message);
+				}
+				_logger.LogCritical("Isauthenticated?"+User.Identity.IsAuthenticated.ToString());
+                var callback = Url.Action("Details","Account", new {email=user.Email});
+				return Redirect(callback);
+            }
+			return View();
+		
+		}
+		public async Task<IActionResult> Details(string email) 
+		{
+			var user=await _userManager.FindByEmailAsync(email);
+			ViewData["email"] = user.Email;
+			
+            return View();		
+		}
 	}
 
 }

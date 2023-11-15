@@ -1,0 +1,12 @@
+﻿@model webapp.Models.User
+@{
+    ViewData["Title"] = "Login";
+}
+
+<form method="post">
+    <input placeholder="username" asp-for="uname">
+    <span asp-validation-for="uname"></span>
+    <input placeholder="email" asp-for="email">
+    <span asp-validation-for="email"></span>
+    <button type="submit">SUBMIT</button>
+</form>

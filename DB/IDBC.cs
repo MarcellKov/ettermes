@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using webapp.DataModels;
 
 namespace webapp.DB
 {
-    public class DBC : DbContext
+    public class IDBC : IdentityDbContext<IdentityUser>
     {
+
         public IConfiguration _config;
-        public DBC(IConfiguration config)
+        public IDBC(IConfiguration config)
 
         {
             _config = config;
@@ -17,8 +17,8 @@ namespace webapp.DB
         {
             optionsBuilder.UseSqlServer(_config.GetConnectionString("DatabaseConnection"));
         }
-        public DbSet<UserDataModel> UserDatas { get; set; }
-        
 
+        public DbSet<IdentityUser> identityUsers { get; set; }
+        public DbSet<Microsoft.AspNetCore.Identity.IdentityUserClaim<Guid>> IdentityUserClaims { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using webapp.DataModels;
 using webapp.DB;
@@ -24,7 +25,7 @@ namespace webapp.Controllers
         {
             return View();
         }
-
+        
        public IActionResult Contact()
         {
             return View();
