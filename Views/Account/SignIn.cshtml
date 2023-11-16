@@ -2,13 +2,20 @@
 @{
     ViewData["Title"] = "Sign in";
 }
-
-<form method="post">
-    <input placeholder="email" asp-for="email">
-    <span asp-validation-for="email"></span>
-
-    <input placeholder="password" asp-for="password" type="password">
-    <span asp-validation-for="password" ></span>
-
-    <button type="submit">SUBMIT</button>
+<form class="border border-4 border-dark rounded-2 row" method="post">
+    <div class="rounded col-md">
+        <div class="row form-floating mb-4 justify-content-center">
+            <input id="email" class="form-control w-50 border border-dark" placeholder="Email address" asp-for="email">
+            <label for="email">Email address</label>
+            <span asp-validation-for="email"></span>
+        </div>
+        <div class="row form-floating mb-4">
+            <input id="floatingInputGrid" class="form-control w-50 border border-dark " placeholder="Password" asp-for="password" type="password">
+            <label for="floatingInputGrid">Password</label>
+            <span asp-validation-for="password"></span>
+        </div>
+        <div class="row mb-4 w-25 h-25 rounded-3">
+            <button class="btn btn-dark active" type="submit">SUBMIT</button>
+        </div>
+    </div>
 </form>

@@ -25,7 +25,7 @@ namespace webapp.Controllers
         {
             return View();
         }
-        [Authorize(Roles ="User")]
+        
        public IActionResult Contact()
         {
             return View();
