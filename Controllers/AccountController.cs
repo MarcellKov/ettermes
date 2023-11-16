@@ -37,7 +37,7 @@ namespace webapp.Controllers
 			if (ModelState.IsValid)
 			{
 				var user=new IdentityUser { UserName=u.uname, Email=u.email};
-				var res=await _userManager.CreateAsync(user, "Test_12345");
+				var res=await _userManager.CreateAsync(user, u.password);
 				
 				if (res.Succeeded)
 				{
@@ -61,6 +61,7 @@ namespace webapp.Controllers
 		}
 		public async Task<IActionResult> EmailConfirmation(string id,string token)
 		{
+			
 			var user = await _userManager.FindByIdAsync(id);
 			if (user != null) {
 				_logger.LogCritical("MEGVAN A USER");
@@ -81,14 +82,14 @@ namespace webapp.Controllers
 			return View();
 		}
 		[HttpPost]
-		public async Task<IActionResult> SignIn(string email)
+		public async Task<IActionResult> SignIn(string email,string password)
 		{
 			var user = await _userManager.FindByEmailAsync(email);
 	
 			if (user != null) {
 				try
 				{
-                    await _signInManager.SignInAsync(user, false);
+					await _signInManager.PasswordSignInAsync(user,password,true,true);
 					var cansignin=await _signInManager.CanSignInAsync(user);
 					_logger.LogCritical(cansignin.ToString());
                 }
@@ -111,6 +112,8 @@ namespace webapp.Controllers
 			
             return View();		
 		}
-	}
+		public IActionResult AccessDenied() {  return View(); }
+
+    }
 
 }

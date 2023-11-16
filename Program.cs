@@ -19,6 +19,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.Configure<IdentityOptions>(options =>
 {
 	// Password settings.
+	
 	options.Password.RequireDigit = true;
 	options.Password.RequireLowercase = true;
 	options.Password.RequireNonAlphanumeric = true;
@@ -32,6 +33,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 	options.Lockout.AllowedForNewUsers = true;
 
 	// User settings.
+	options.User.RequireUniqueEmail= true;
 	options.User.AllowedUserNameCharacters =
 	"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
 	options.User.RequireUniqueEmail = false;
@@ -44,7 +46,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 	options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
 	options.LoginPath = "/Account/SignIn";
-	options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+	options.AccessDeniedPath = "/Account/AccessDenied";
 	options.SlidingExpiration = true;
 });
 
