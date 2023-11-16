@@ -35,30 +35,7 @@ namespace webapp.Controllers
         public IActionResult Details(string nev)
         {
             return Ok(_dbc.UserDatas.Where(m=>m.uname==nev));
-        }
-        
-        public IActionResult Login()
-        {
-          
-            return View();
-        }
-        [HttpPost]
-        public IActionResult Login(User u) {
-            if (ModelState.IsValid)
-            {
-                
-              UserDataModel model = new UserDataModel();
-                model.email = u.email;
-                model.uname=u.uname;
-                model.id = Guid.NewGuid();
-                _dbc.Add(model);
-                _dbc.SaveChanges();
-
-              return RedirectToAction("Index", "Home");
-            }
-            return View(u);
-        }
-        
+        }        
         
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
